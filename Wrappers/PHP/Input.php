@@ -15,6 +15,8 @@ class Input{
     private $authToken;
     private $job_id;
     private $algorithms_id;
+    private $baseDomain; // URL of the enviroment that executing this
+                         // example: https://api.algorithms.io
     
     private $error;
     
@@ -65,6 +67,13 @@ class Input{
                 $this->error = "algorithm_id not set.";
                 return false;
             }
+            // Set baseDomain
+            if(isset($systemParamObj->baseDomain)){
+                $this->baseDomain = $systemParamObj->baseDomain;
+            }else{
+                $this->error = "baseDomain not set.";
+                return false;
+            }
         }else{
             return false;
         }
@@ -82,6 +91,9 @@ class Input{
     }
     public function getAlgorithmId(){
         return $this->algorithm_id;
+    }
+    public function getBaseDomain(){
+        return $this->baseDomain;
     }
     public function getUserParametersJson(){
         return $this->userJsonParameters_json;

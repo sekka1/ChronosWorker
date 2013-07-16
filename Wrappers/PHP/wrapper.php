@@ -11,7 +11,6 @@ include('AlgorithmsIO/SDK/Dataset.php');
 
 $php_bin = '/usr/bin/php ';
 $script_path = '/opt/UserPackages/PHP/';
-$baseDomein = 'http://pod3.staging.v1.api.algorithms.io';
 
 /**
  * Set and validate incomming parameters
@@ -37,7 +36,7 @@ if(!$isValid_userParams){
  * Start the process of executing the job
  */
 $algorithms_job = new AlgorithmsIO\InternalJobUpdates\Jobs();
-$algorithms_job->setBaseDomainName($baseDomein);
+$algorithms_job->setBaseDomainName($input->getBaseDomain());
 $algorithms_job->setJobId($input->getJobId());
 $algorithms_job->setUsersAuthToken($input->getAuthToken());
 
@@ -71,7 +70,7 @@ $algorithms_job->updateJobStatus('UPLOADING_RESULTS');
 
 // Upload result as a datasource
 $dataset = new \AlgorithmsIO\SDK\Dataset();
-$dataset->setBaseDomainName($baseDomein);
+$dataset->setBaseDomainName($input->getBaseDomain());
 $dataset->setAuthToken($input->getAuthToken());
 
 if($dataset->uploadData('Job:'.$input->getJobId(), $userPhar->getResults())){
