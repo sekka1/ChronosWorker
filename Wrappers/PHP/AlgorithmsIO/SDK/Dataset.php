@@ -29,16 +29,25 @@ namespace AlgorithmsIO\SDK{
         public function setBaseDomainName($domain){
             $this->baseDomain = $domain;
         }
+        /**
+         * Uploads data into Algorithms.io as a dataset.
+         * 
+         * Pass in a name for the file and a text string.
+         * 
+         * @param string $name
+         * @param string $data
+         * @return boolean
+         */
         public function uploadData($name, $data){
             $this->writeStringToFile($name, $data);
             
             $post_params['authToken'] = $this->authToken;
             $post_params['name'] = $name;
-            $post_params['theFile'] = '@'.$this->tempFileLocation.'gar6';//$name;
+            $post_params['theFile'] = '@'.$this->tempFileLocation.$name;
             
-            $response_json = $this->utilities->curlPost($this->baseDomain.$this->url_path, $post_params);
-           
-            //$this->removeFile($name);
+            //$response_json = $this->utilities->curlPost($this->baseDomain.$this->url_path, $post_params);
+            $response_json = $this->postCurlCall($this->baseDomain.$this->url_path, $post_params);
+            $this->removeFile($name);
             
             $this->responseObj = json_decode($response_json);
        
@@ -49,6 +58,19 @@ namespace AlgorithmsIO\SDK{
                 return false;
             
             return true;
+        }
+        /**
+         * Submits the POST call
+         * 
+         * Making this public so that the unit tests can "Mock" this functionality
+         * and not actually call it.
+         * 
+         * @param string $url
+         * @param array $post_params
+         * @return string
+         */
+        public function postCurlCall($url, $post_params){
+            return $this->utilities->curlPost($url, $post_params);
         }
         public function getUploadedDataSetID(){
             if(json_last_error()!=0)

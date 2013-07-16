@@ -11,6 +11,7 @@ include('AlgorithmsIO/SDK/Dataset.php');
 
 $php_bin = '/usr/bin/php ';
 $script_path = '/opt/UserPackages/PHP/';
+$allOutputResults = '/opt/all_chronos_output_results/php_wrapper_results.txt';
 
 /**
  * Set and validate incomming parameters
@@ -25,10 +26,12 @@ $isValid_userParams = $input->setUserParameterJson($userParamters);
 
 if(!$isValid_systemParams){
     echo $input->getError();
+    outputResultsToLocalFile($allOutputResults, 'Not Valid systemParams', $input->getError());
     exit;
 }
 if(!$isValid_userParams){
     echo $input->getError();
+    outputResultsToLocalFile($allOutputResults, 'Not Valid userParams', $input->getError());
     exit;
 }
 
@@ -60,8 +63,7 @@ $function = $input->getFunction();
 $userPhar = new $class();
 $userPhar->$function($paramertArray);
 echo $userPhar->getResults();
-
-
+outputResultsToLocalFile($allOutputResults, $input->getJobId(), $userPhar->getResults());
 
 // Capture result
 
@@ -82,8 +84,16 @@ if($dataset->uploadData('Job:'.$input->getJobId(), $userPhar->getResults())){
 }
 
 
-
-
+/**
+ * Output results to a file
+ * 
+ * @param filePath $filePath
+ * @param string $job_id
+ * @param string $output
+ */
+function outputResultsToLocalFile($filePath, $job_id, $output){
+    file_put_contents($filePath, 'job_id:'.$job_id."\n".$output."\n>>>>>>>>>>>>>>>>>>>>>>>>\n", FILE_APPEND);
+}
 
 
 ?>

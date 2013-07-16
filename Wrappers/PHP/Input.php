@@ -28,6 +28,13 @@ class Input{
     public function getJobId(){
         return $this->job_id;
     }
+    /**
+     * Takes in a json and checks if all the needed values are in the list.
+     * If not, it will return false and the error.
+     * 
+     * @param json $systemParamsJson
+     * @return boolean
+     */
     public function setSystemParameterInput($systemParamsJson){
         if($this->isValidJSON($systemParamsJson)){
             $systemParamObj = json_decode($systemParamsJson);
@@ -75,6 +82,7 @@ class Input{
                 return false;
             }
         }else{
+            $this->error = 'invalid json';
             return false;
         }
         return true;
