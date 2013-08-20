@@ -23,9 +23,10 @@ include_once(dirname(__FILE__).'/../SDK/Utilities.php');
         
         private $status;
         private $additional_info;
+        private $datasource_id;
 
         public function __construct() {
-            $this->utilities = new \Utilities();
+            $this->utilities = new \AlgorithmsIO\Utilities();
         }
         public function setUsersAuthToken($authToken){
             $this->usersAuthToken = $authToken;
@@ -46,9 +47,10 @@ include_once(dirname(__FILE__).'/../SDK/Utilities.php');
          * @param json $additional_info
          * @return type
          */
-        public function updateJobStatus($status, $additional_info=null){
+        public function updateJobStatus($status, $additional_info=null, $datasource_id=null){
             $this->status = $status;
             $this->additional_info = $additional_info;
+            $this->datasource_id = $datasource_id;
             return $this->submit();
         }
         /**
@@ -62,6 +64,7 @@ include_once(dirname(__FILE__).'/../SDK/Utilities.php');
             $post_params['job_id'] = $this->job_id;
             $post_params['status'] = $this->status;
             $post_params['additional_info'] = $this->additional_info;
+            $post_params['datasource_id'] = $this->datasource_id;
             
             //$response = $this->utilities->curlPost($this->baseDomain.$this->url_path, $post_params);
             $response = $this->postCurlCall($this->baseDomain.$this->url_path, $post_params);

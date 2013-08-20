@@ -21,7 +21,7 @@ namespace AlgorithmsIO\SDK{
         private $responseObj;
         
         public function __construct() {
-            $this->utilities = new \Utilities();
+            $this->utilities = new \AlgorithmsIO\Utilities();
         }
         public function setAuthToken($authToken){
             $this->authToken = $authToken;

@@ -53,8 +53,8 @@ $algorithms_job->updateJobStatus('STARTING');
 
 //echo $output;
 // Or
-include('/opt/UserPackages/PHP/'.$input->getAlgorithmId().'.phar');
-$paramertArray = $input->getUserParametersJson();// datasources, input param strings
+include($script_path.$input->getAlgorithmId().'.phar');
+$paramertArray = json_decode($input->getUserParametersJson(),true);// datasources, input param strings
 $class = $input->getClass();
 $function = $input->getFunction();
 
@@ -77,7 +77,7 @@ $dataset->setAuthToken($input->getAuthToken());
 
 if($dataset->uploadData('Job:'.$input->getJobId(), $userPhar->getResults())){
     // Update job_stats: COMPLETED
-    $algorithms_job->updateJobStatus('COMPLETED','{"datasource_id":"'.$dataset->getUploadedDataSetID().'"}');
+    $algorithms_job->updateJobStatus('COMPLETED','{"datasource_id":"'.$dataset->getUploadedDataSetID().'"}', $dataset->getUploadedDataSetID());
 }else{
     // Error uploading
     $algorithms_job->updateJobStatus('FAILED','{"error":"error uploading result dataset"}');
